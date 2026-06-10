@@ -136,54 +136,50 @@ class _FileScreenState extends State<FileScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final loc = context.watch<LocalizationService>();
-    final isRtl = loc.isRtl;
     final s = loc.strings;
 
     if (_selectedFileContent != null) {
-      return Directionality(
-        textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Row(
-              children: [
-                Text(_getFileIcon(_selectedFileName!)),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(_selectedFileName!,
-                      overflow: TextOverflow.ellipsis),
-                ),
-              ],
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.save_outlined),
-                tooltip: s.saveToDevice,
-                onPressed: _saveToDevice,
-              ),
-              IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () => setState(() {
-                  _selectedFileContent = null;
-                  _selectedFileName = null;
-                  _selectedFilePath = null;
-                }),
+      return Scaffold(
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Text(_getFileIcon(_selectedFileName!)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(_selectedFileName!,
+                    overflow: TextOverflow.ellipsis),
               ),
             ],
           ),
-          body: Container(
-            color: theme.brightness == Brightness.dark
-                ? const Color(0xFF1E1E1E)
-                : const Color(0xFFF8F8F8),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: SelectableText(
-                _selectedFileContent!,
-                style: TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 13,
-                  height: 1.5,
-                  color: theme.colorScheme.onSurface,
-                ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.save_outlined),
+              tooltip: s.saveToDevice,
+              onPressed: _saveToDevice,
+            ),
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => setState(() {
+                _selectedFileContent = null;
+                _selectedFileName = null;
+                _selectedFilePath = null;
+              }),
+            ),
+          ],
+        ),
+        body: Container(
+          color: theme.brightness == Brightness.dark
+              ? const Color(0xFF1E1E1E)
+              : const Color(0xFFF8F8F8),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: SelectableText(
+              _selectedFileContent!,
+              style: TextStyle(
+                fontFamily: 'monospace',
+                fontSize: 13,
+                height: 1.5,
+                color: theme.colorScheme.onSurface,
               ),
             ),
           ),
@@ -191,82 +187,80 @@ class _FileScreenState extends State<FileScreen> {
       );
     }
 
-    return Directionality(
-      textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(s.files),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.file_open_outlined),
-              tooltip: s.openFile,
-              onPressed: _pickFile,
-            ),
-          ],
-        ),
-        body: _recentFiles.isEmpty
-            ? Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.folder_open, size: 64,
-                        color: theme.colorScheme.outlineVariant),
-                    const SizedBox(height: 16),
-                    Text(s.noFiles,
-                        style: theme.textTheme.titleSmall?.copyWith(
-                            color: theme.colorScheme.outline)),
-                    const SizedBox(height: 8),
-                    FilledButton.tonalIcon(
-                      onPressed: _pickFile,
-                      icon: const Icon(Icons.file_open),
-                      label: Text(s.openFile),
-                    ),
-                  ],
-                ),
-              )
-            : ListView(
-                padding: const EdgeInsets.all(8),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(s.files),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.file_open_outlined),
+            tooltip: s.openFile,
+            onPressed: _pickFile,
+          ),
+        ],
+      ),
+      body: _recentFiles.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-                    child: Text(s.recentFiles,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                            color: theme.colorScheme.outline,
-                            fontWeight: FontWeight.w600)),
+                  Icon(Icons.folder_open, size: 64,
+                      color: theme.colorScheme.outlineVariant),
+                  const SizedBox(height: 16),
+                  Text(s.noFiles,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                          color: theme.colorScheme.outline)),
+                  const SizedBox(height: 8),
+                  FilledButton.tonalIcon(
+                    onPressed: _pickFile,
+                    icon: const Icon(Icons.file_open),
+                    label: Text(s.openFile),
                   ),
-                  ...List.generate(_recentFiles.length, (i) {
-                    final file = _recentFiles[i];
-                    return ListTile(
-                      leading: Text(_getFileIcon(file['name']), style: const TextStyle(fontSize: 24)),
-                      title: Text(file['name'],
-                          overflow: TextOverflow.ellipsis),
-                      subtitle: Text(
-                        '${_formatFileSize(file['size'])} • ${file['name'].split('.').last}',
-                        style: theme.textTheme.bodySmall,
-                      ),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () async {
-                        try {
-                          final f = File(file['path']);
-                          final content = await f.readAsString();
-                          setState(() {
-                            _selectedFileContent = content;
-                            _selectedFileName = file['name'];
-                            _selectedFilePath = file['path'];
-                          });
-                        } catch (e) {
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Error: $e')),
-                            );
-                          }
-                        }
-                      },
-                    );
-                  }),
                 ],
               ),
-      ),
+            )
+          : ListView(
+              padding: const EdgeInsets.all(8),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                  child: Text(s.recentFiles,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.outline,
+                          fontWeight: FontWeight.w600)),
+                ),
+                ...List.generate(_recentFiles.length, (i) {
+                  final file = _recentFiles[i];
+                  return ListTile(
+                    leading: Text(_getFileIcon(file['name']),
+                        style: const TextStyle(fontSize: 24)),
+                    title: Text(file['name'],
+                        overflow: TextOverflow.ellipsis),
+                    subtitle: Text(
+                      '${_formatFileSize(file['size'])} • ${file['name'].split('.').last}',
+                      style: theme.textTheme.bodySmall,
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () async {
+                      try {
+                        final f = File(file['path']);
+                        final content = await f.readAsString();
+                        setState(() {
+                          _selectedFileContent = content;
+                          _selectedFileName = file['name'];
+                          _selectedFilePath = file['path'];
+                        });
+                      } catch (e) {
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error: $e')),
+                          );
+                        }
+                      }
+                    },
+                  );
+                }),
+              ],
+            ),
     );
   }
 }

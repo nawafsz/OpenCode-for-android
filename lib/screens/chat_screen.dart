@@ -253,12 +253,9 @@ class _ChatScreenState extends State<ChatScreen> {
     final theme = Theme.of(context);
     final api = context.watch<ApiService>();
     final loc = context.watch<LocalizationService>();
-    final isRtl = loc.isRtl;
     final s = loc.strings;
 
-    return Directionality(
-      textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
-      child: Scaffold(
+    return Scaffold(
         drawer: Drawer(
           child: Column(
             children: [
@@ -525,7 +522,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 strokeWidth: 2, color: Colors.white,
                               ),
                             )
-                          : const Icon(Icons.arrow_upward),
+                  : const Icon(Icons.arrow_upward),
                     ),
                   ),
                 ],
@@ -533,7 +530,6 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

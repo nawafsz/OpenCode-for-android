@@ -109,19 +109,22 @@ class _MainShellState extends State<MainShell> {
     final loc = context.watch<LocalizationService>();
     final s = loc.strings;
 
-    return Scaffold(
-        body: IndexedStack(
-          index: _currentIndex,
-          children: [
-            const ChatScreen(),
-            const FileScreen(),
-            SettingsScreen(
-              themeMode: widget.themeMode,
-              onThemeChanged: widget.onThemeChanged,
-            ),
-          ],
+    return Column(
+      children: [
+        Expanded(
+          child: IndexedStack(
+            index: _currentIndex,
+            children: [
+              const ChatScreen(),
+              const FileScreen(),
+              SettingsScreen(
+                themeMode: widget.themeMode,
+                onThemeChanged: widget.onThemeChanged,
+              ),
+            ],
+          ),
         ),
-        bottomNavigationBar: NavigationBar(
+        NavigationBar(
           selectedIndex: _currentIndex,
           onDestinationSelected: (i) => setState(() => _currentIndex = i),
           destinations: [
@@ -142,6 +145,7 @@ class _MainShellState extends State<MainShell> {
             ),
           ],
         ),
+      ],
     );
   }
 }

@@ -121,205 +121,201 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final api = context.watch<ApiService>();
     final loc = context.watch<LocalizationService>();
     final isRtl = loc.isRtl;
     final s = loc.strings;
 
-    return Directionality(
-      textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(s.settings),
-          actions: [
-            TextButton.icon(
-              onPressed: _saving ? null : _save,
-              icon: _saving
-                  ? const SizedBox(
-                      width: 16, height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.check, size: 18),
-              label: Text(s.save),
-            ),
-          ],
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            _sectionCard(
-              theme: theme,
-              icon: Icons.key,
-              title: s.settingsApiConfig,
-              children: [
-                Text(s.settingsApiDesc,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.outline)),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _apiKeyController,
-                  obscureText: _obscureKey,
-                  decoration: InputDecoration(
-                    labelText: s.apiKey,
-                    hintText: 'sk-...',
-                    border: const OutlineInputBorder(),
-                    prefixIcon: const Icon(Icons.vpn_key_outlined, size: 20),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureKey ? Icons.visibility_off : Icons.visibility,
-                        size: 20,
-                      ),
-                      onPressed: () =>
-                          setState(() => _obscureKey = !_obscureKey),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(s.settings),
+        actions: [
+          TextButton.icon(
+            onPressed: _saving ? null : _save,
+            icon: _saving
+                ? const SizedBox(
+                    width: 16, height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.check, size: 18),
+            label: Text(s.save),
+          ),
+        ],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _sectionCard(
+            theme: theme,
+            icon: Icons.key,
+            title: s.settingsApiConfig,
+            children: [
+              Text(s.settingsApiDesc,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.outline)),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _apiKeyController,
+                obscureText: _obscureKey,
+                decoration: InputDecoration(
+                  labelText: s.apiKey,
+                  hintText: 'sk-...',
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.vpn_key_outlined, size: 20),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureKey ? Icons.visibility_off : Icons.visibility,
+                      size: 20,
                     ),
+                    onPressed: () =>
+                        setState(() => _obscureKey = !_obscureKey),
                   ),
                 ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: _testing ? null : _testConnection,
-                        icon: _testing
-                            ? const SizedBox(
-                                width: 16, height: 16,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              )
-                            : Icon(
-                                _testResult == true
-                                    ? Icons.check_circle
-                                    : _testResult == false
-                                        ? Icons.error
-                                        : Icons.wifi_find,
-                                size: 18,
-                              ),
-                        label: Text(_testing
-                            ? s.testing
-                            : _testResult == true
-                                ? s.connected
-                                : _testResult == false
-                                    ? s.failed
-                                    : s.testConnection),
-                      ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: _testing ? null : _testConnection,
+                      icon: _testing
+                          ? const SizedBox(
+                              width: 16, height: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : Icon(
+                              _testResult == true
+                                  ? Icons.check_circle
+                                  : _testResult == false
+                                      ? Icons.error
+                                      : Icons.wifi_find,
+                              size: 18,
+                            ),
+                      label: Text(_testing
+                          ? s.testing
+                          : _testResult == true
+                              ? s.connected
+                              : _testResult == false
+                                  ? s.failed
+                                  : s.testConnection),
                     ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            _sectionCard(
-              theme: theme,
-              icon: Icons.smart_toy_outlined,
-              title: s.model,
-              children: [
-                Text(s.modelId,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.outline)),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _modelController,
-                  decoration: InputDecoration(
-                    labelText: s.modelId,
-                    hintText: 'big-pickle',
-                    border: const OutlineInputBorder(),
-                    prefixIcon: const Icon(Icons.model_training, size: 20),
                   ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          _sectionCard(
+            theme: theme,
+            icon: Icons.smart_toy_outlined,
+            title: s.model,
+            children: [
+              Text(s.modelId,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.outline)),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _modelController,
+                decoration: InputDecoration(
+                  labelText: s.modelId,
+                  hintText: 'big-pickle',
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.model_training, size: 20),
                 ),
-                const SizedBox(height: 12),
-                Text(s.modelQuickSelect,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.outline)),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: _presetModels.map<Widget>((m) {
-                    final selected = _modelController.text == m['id'];
-                    return ChoiceChip(
-                      label: Text(m['name']!, style: const TextStyle(fontSize: 12)),
-                      avatar: Icon(
-                        selected ? Icons.check : Icons.smart_toy_outlined,
-                        size: 14,
-                      ),
-                      selected: selected,
-                      onSelected: (_) => _modelController.text = m['id']!,
+              ),
+              const SizedBox(height: 12),
+              Text(s.modelQuickSelect,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.outline)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: _presetModels.map<Widget>((m) {
+                  final selected = _modelController.text == m['id'];
+                  return ChoiceChip(
+                    label: Text(m['name']!, style: const TextStyle(fontSize: 12)),
+                    avatar: Icon(
+                      selected ? Icons.check : Icons.smart_toy_outlined,
+                      size: 14,
+                    ),
+                    selected: selected,
+                    onSelected: (_) => _modelController.text = m['id']!,
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          _sectionCard(
+            theme: theme,
+            icon: Icons.palette_outlined,
+            title: s.appearance,
+            children: [
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(Icons.brightness_6, color: theme.colorScheme.primary),
+                title: Text(s.darkMode),
+                trailing: Switch(
+                  value: widget.themeMode == ThemeMode.dark,
+                  onChanged: (v) {
+                    widget.onThemeChanged?.call(
+                      v ? ThemeMode.dark : ThemeMode.light,
                     );
-                  }).toList(),
+                  },
                 ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            _sectionCard(
-              theme: theme,
-              icon: Icons.palette_outlined,
-              title: s.appearance,
-              children: [
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: Icon(Icons.brightness_6, color: theme.colorScheme.primary),
-                  title: Text(s.darkMode),
-                  trailing: Switch(
-                    value: widget.themeMode == ThemeMode.dark,
-                    onChanged: (v) {
-                      widget.onThemeChanged?.call(
-                        v ? ThemeMode.dark : ThemeMode.light,
-                      );
-                    },
-                  ),
-                ),
-                if (widget.themeMode != ThemeMode.system)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Text(
-                      widget.themeMode == ThemeMode.dark
-                          ? s.darkModeEnabled
-                          : s.lightModeEnabled,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.outline,
-                      ),
+              ),
+              if (widget.themeMode != ThemeMode.system)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    widget.themeMode == ThemeMode.dark
+                        ? s.darkModeEnabled
+                        : s.lightModeEnabled,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.outline,
                     ),
                   ),
-                const Divider(),
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: Icon(Icons.language, color: theme.colorScheme.primary),
-                  title: Text(s.language),
-                  subtitle: Text(isRtl ? s.arabic : s.english),
-                  trailing: SegmentedButton<String>(
-                    segments: [
-                      ButtonSegment(value: 'en', label: Text(s.en)),
-                      ButtonSegment(value: 'ar', label: Text(s.ar)),
-                    ],
-                    selected: {isRtl ? 'ar' : 'en'},
-                    onSelectionChanged: (selected) {
-                      final code = selected.first;
-                      loc.setLocale(Locale(code));
-                    },
-                  ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            _sectionCard(
-              theme: theme,
-              icon: Icons.info_outline,
-              title: s.about,
-              children: [
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text('OpenCode AI'),
-                  subtitle: Text(s.version),
+              const Divider(),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(Icons.language, color: theme.colorScheme.primary),
+                title: Text(s.language),
+                subtitle: Text(isRtl ? s.arabic : s.english),
+                trailing: SegmentedButton<String>(
+                  segments: [
+                    ButtonSegment(value: 'en', label: Text(s.en)),
+                    ButtonSegment(value: 'ar', label: Text(s.ar)),
+                  ],
+                  selected: {isRtl ? 'ar' : 'en'},
+                  onSelectionChanged: (selected) {
+                    final code = selected.first;
+                    loc.setLocale(Locale(code));
+                  },
                 ),
-                const Divider(height: 1),
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(s.apiEndpoint),
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-          ],
-        ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          _sectionCard(
+            theme: theme,
+            icon: Icons.info_outline,
+            title: s.about,
+            children: [
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('OpenCode AI'),
+                subtitle: Text(s.version),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(s.apiEndpoint),
+              ),
+            ],
+          ),
+          const SizedBox(height: 32),
+        ],
       ),
     );
   }
