@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/api_service.dart';
-import '../services/localization_service.dart';
+import '../services/app_strings.dart';
 
 class SettingsScreen extends StatefulWidget {
   final ThemeMode themeMode;
@@ -51,7 +51,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _save() async {
     setState(() => _saving = true);
     try {
-      final loc = context.read<LocalizationService>();
       final api = context.read<ApiService>();
       if (_apiKeyController.text.isNotEmpty) {
         await api.saveApiKey(_apiKeyController.text.trim());
@@ -62,7 +61,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(loc.strings.saved),
+            content: Text(const AppStrings().saved),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -80,9 +79,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _testConnection() async {
     if (_apiKeyController.text.trim().isEmpty) {
-      final loc = context.read<LocalizationService>();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(loc.strings.errorNoKey)),
+        SnackBar(content: Text(const AppStrings().errorNoKey)),
       );
       return;
     }
@@ -121,9 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final loc = context.watch<LocalizationService>();
-    final isRtl = loc.isRtl;
-    final s = loc.strings;
+    const s = AppStrings();
 
     return Scaffold(
       appBar: AppBar(
@@ -276,26 +272,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                 ),
-              const Divider(),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Icon(Icons.language, color: theme.colorScheme.primary),
-                title: Text(s.language),
-                subtitle: Text(isRtl ? s.arabic : s.english),
-                trailing: SegmentedButton<String>(
-                  segments: [
-                    ButtonSegment(value: 'en', label: Text(s.en)),
-                    ButtonSegment(value: 'ar', label: Text(s.ar)),
-                  ],
-                  selected: {isRtl ? 'ar' : 'en'},
-                  onSelectionChanged: (selected) {
-                    final code = selected.first;
-                    loc.setLocale(Locale(code));
-                  },
-                ),
-              ),
-            ],
-          ),
+              ],
+            ),
           const SizedBox(height: 12),
           _sectionCard(
             theme: theme,

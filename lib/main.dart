@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'services/api_service.dart';
-import 'services/localization_service.dart';
+import 'services/app_strings.dart';
 import 'screens/splash_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/files_screen.dart';
@@ -17,11 +17,8 @@ class OpenCodeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ApiService()),
-        ChangeNotifierProvider(create: (_) => LocalizationService()),
-      ],
+    return ChangeNotifierProvider(
+      create: (_) => ApiService(),
       child: const _AppWithLocale(),
     );
   }
@@ -39,8 +36,6 @@ class _AppWithLocaleState extends State<_AppWithLocale> {
 
   @override
   Widget build(BuildContext context) {
-    final loc = context.watch<LocalizationService>();
-
     return MaterialApp(
       title: 'OpenCode AI',
       debugShowCheckedModeBanner: false,
@@ -55,12 +50,6 @@ class _AppWithLocaleState extends State<_AppWithLocale> {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      locale: loc.locale,
-      localizationsDelegates: const [
-        DefaultMaterialLocalizations.delegate,
-        DefaultWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: LocalizationService.supportedLocales,
       home: Builder(
         builder: (context) => MainShell(
           themeMode: _themeMode,
@@ -106,8 +95,7 @@ class _MainShellState extends State<MainShell> {
       return const SplashScreen();
     }
 
-    final loc = context.watch<LocalizationService>();
-    final s = loc.strings;
+    const s = AppStrings();
 
     return Column(
       children: [

@@ -2,8 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
-import '../services/localization_service.dart';
+import '../services/app_strings.dart';
 
 class FileScreen extends StatefulWidget {
   const FileScreen({super.key});
@@ -135,8 +134,7 @@ class _FileScreenState extends State<FileScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final loc = context.watch<LocalizationService>();
-    final s = loc.strings;
+    const s = AppStrings();
 
     if (_selectedFileContent != null) {
       return Scaffold(

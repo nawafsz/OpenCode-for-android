@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../services/localization_service.dart';
+import '../services/app_strings.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -44,149 +43,140 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final loc = context.watch<LocalizationService>();
-    final isRtl = loc.isRtl;
-    final s = loc.strings;
+    const s = AppStrings();
 
-    return Directionality(
-      textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
-      child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                theme.colorScheme.primary,
-                theme.colorScheme.primary.withAlpha(180),
-                theme.colorScheme.secondary,
-              ],
-            ),
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              theme.colorScheme.primary,
+              theme.colorScheme.primary.withAlpha(180),
+              theme.colorScheme.secondary,
+            ],
           ),
-          child: SafeArea(
-            child: FadeTransition(
-              opacity: _fadeAnim,
-              child: SlideTransition(
-                position: _slideAnim,
-                child: Column(
-                  children: [
-                    const Spacer(flex: 2),
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(32),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(50),
-                            blurRadius: 30,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.code,
-                          size: 56,
-                          color: theme.colorScheme.primary,
+        ),
+        child: SafeArea(
+          child: FadeTransition(
+            opacity: _fadeAnim,
+            child: SlideTransition(
+              position: _slideAnim,
+              child: Column(
+                children: [
+                  const Spacer(flex: 2),
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(32),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(50),
+                          blurRadius: 30,
+                          offset: const Offset(0, 10),
                         ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.code,
+                        size: 56,
+                        color: theme.colorScheme.primary,
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'OpenCode',
-                      style: theme.textTheme.headlineLarge?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: -1,
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'OpenCode',
+                    style: theme.textTheme.headlineLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: -1,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    s.codeAssistant,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: Colors.white.withAlpha(200),
+                    ),
+                  ),
+                  const SizedBox(height: 48),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 48),
+                    child: Text(
+                      s.appDescription,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: Colors.white.withAlpha(180),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      s.codeAssistant,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: Colors.white.withAlpha(200),
-                      ),
-                    ),
-                    const SizedBox(height: 48),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 48),
-                      child: Text(
-                        s.appDescription,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.white.withAlpha(180),
+                  ),
+                  const Spacer(flex: 2),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: Row(
+                      children: [
+                        _FeatureChip(
+                          icon: Icons.chat_bubble_outline,
+                          label: s.welcomeWrite,
                         ),
-                      ),
+                        const SizedBox(width: 8),
+                        _FeatureChip(
+                          icon: Icons.bug_report_outlined,
+                          label: s.welcomeDebug,
+                        ),
+                      ],
                     ),
-                    const Spacer(flex: 2),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: Row(
-                        children: [
-                          _FeatureChip(
-                            icon: Icons.chat_bubble_outline,
-                            label: s.welcomeWrite,
-                            isRtl: isRtl,
-                          ),
-                          const SizedBox(width: 8),
-                          _FeatureChip(
-                            icon: Icons.bug_report_outlined,
-                            label: s.welcomeDebug,
-                            isRtl: isRtl,
-                          ),
-                        ],
-                      ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: Row(
+                      children: [
+                        _FeatureChip(
+                          icon: Icons.explore_outlined,
+                          label: s.welcomeExplain,
+                        ),
+                        const SizedBox(width: 8),
+                        _FeatureChip(
+                          icon: Icons.speed_outlined,
+                          label: s.welcomeOptimize,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: Row(
-                        children: [
-                          _FeatureChip(
-                            icon: Icons.explore_outlined,
-                            label: s.welcomeExplain,
-                            isRtl: isRtl,
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: FilledButton(
+                        onPressed: () {},
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: theme.colorScheme.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
                           ),
-                          const SizedBox(width: 8),
-                          _FeatureChip(
-                            icon: Icons.speed_outlined,
-                            label: s.welcomeOptimize,
-                            isRtl: isRtl,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 52,
-                        child: FilledButton(
-                          onPressed: () {},
-                          style: FilledButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: theme.colorScheme.primary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                          child: Text(
-                            s.getStarted,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                        ),
+                        child: Text(
+                          s.getStarted,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
-                    const Spacer(),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 32),
+                  const Spacer(),
+                ],
               ),
             ),
           ),
@@ -199,12 +189,10 @@ class _SplashScreenState extends State<SplashScreen>
 class _FeatureChip extends StatelessWidget {
   final IconData icon;
   final String label;
-  final bool isRtl;
 
   const _FeatureChip({
     required this.icon,
     required this.label,
-    required this.isRtl,
   });
 
   @override
@@ -218,7 +206,7 @@ class _FeatureChip extends StatelessWidget {
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
+          textDirection: TextDirection.ltr,
           children: [
             Icon(icon, color: Colors.white, size: 18),
             const SizedBox(width: 6),

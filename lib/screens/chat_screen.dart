@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/chat_message.dart';
 import '../services/api_service.dart';
-import '../services/localization_service.dart';
+import '../services/app_strings.dart';
 import '../widgets/message_bubble.dart';
 import 'settings_screen.dart';
 
@@ -29,8 +29,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _addWelcomeMessage() {
-    final loc = context.read<LocalizationService>();
-    final s = loc.strings;
+    const s = AppStrings();
     setState(() {
       _messages.add(ChatMessage(
         id: 'welcome',
@@ -90,8 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if (text.isEmpty || _isLoading) return;
 
     final api = context.read<ApiService>();
-    final loc = context.read<LocalizationService>();
-    final s = loc.strings;
+    const s = AppStrings();
 
     if (!api.hasApiKey) {
       if (mounted) {
@@ -167,8 +165,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _showQuickActions() {
-    final loc = context.read<LocalizationService>();
-    final s = loc.strings;
+    const s = AppStrings();
     showModalBottomSheet(
       context: context,
       builder: (ctx) => SafeArea(
@@ -214,8 +211,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _clearChat() {
-    final loc = context.read<LocalizationService>();
-    final s = loc.strings;
+    const s = AppStrings();
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -252,8 +248,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final api = context.watch<ApiService>();
-    final loc = context.watch<LocalizationService>();
-    final s = loc.strings;
+    const s = AppStrings();
 
     return Scaffold(
         drawer: Drawer(
